@@ -4,6 +4,15 @@ import { Aluno } from '../../common/aluno';
 describe("O cadastro de alunos", () => {
   var cadastro: CadastroDeAlunos;
 
+  function cadastrarAluno(nome:string, cpf:string, gitLogin:string, mail:string) {
+    var aluno: Aluno = new Aluno();
+    aluno.nome = nome;
+    aluno.cpf = cpf;
+    aluno.gitLogin = gitLogin;
+    aluno.email = mail;
+    cadastro.cadastrar(aluno);
+  }
+
   beforeEach(() => cadastro = new CadastroDeAlunos())
 
   it("é inicialmente vazio", () => {
@@ -11,13 +20,10 @@ describe("O cadastro de alunos", () => {
   })
 
   it("cadastra alunos corretamente", () => {
-    var aluno: Aluno = new Aluno();
-    aluno.nome = "Mariana";
-    aluno.cpf = "683";
-    cadastro.cadastrar(aluno);
+    cadastrarAluno("Mariana","683", "", "");
 
     expect(cadastro.getAlunos().length).toBe(1);
-    aluno = cadastro.getAlunos()[0];
+    var aluno = cadastro.getAlunos()[0];
     expect(aluno.nome).toBe("Mariana");
     expect(aluno.cpf).toBe("683");
     expect(aluno.email).toBe("");
@@ -25,30 +31,15 @@ describe("O cadastro de alunos", () => {
   })
 
   it("não aceita alunos com CPF duplicado", () => {
-    var aluno: Aluno = new Aluno();
-    aluno.nome = "Mariana";
-    aluno.cpf = "683";
-    cadastro.cadastrar(aluno);
-
-    aluno = new Aluno();
-    aluno.nome = "Pedro";
-    aluno.cpf = "683";
-    cadastro.cadastrar(aluno);
+    cadastrarAluno("Mariana","683", "", "");
+    cadastrarAluno("Pedro","683", "", "");
 
     expect(cadastro.getAlunos().length).toBe(1);
   })
 
-  it("não aceita alunos com login git duplicado", () => {var aluno: Aluno = new Aluno();
-    aluno.nome = "Tales";
-    aluno.cpf = "683";
-    aluno.gitLogin = "tta"
-    cadastro.cadastrar(aluno);
-
-    aluno = new Aluno();
-    aluno.nome = "Tomaz";
-    aluno.cpf = "688";
-    aluno.gitLogin = "tta";
-    cadastro.cadastrar(aluno);
+  it("não aceita alunos com login git duplicado", () => {
+    cadastrarAluno("Tales", "683", "tta", "");
+    cadastrarAluno("Tomaz", "688", "tta", "");
 
     expect(cadastro.getAlunos().length).toBe(1);
   })
