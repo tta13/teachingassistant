@@ -13,6 +13,12 @@ describe("O cadastro de alunos", () => {
     cadastro.cadastrar(aluno);
   }
 
+  function expectSoUmAluno() {
+    expect(cadastro.getAlunos().length).toBe(1);
+    var aluno = cadastro.getAlunos()[0];
+    return aluno;
+  }
+
   beforeEach(() => cadastro = new CadastroDeAlunos())
 
   it("é inicialmente vazio", () => {
@@ -22,8 +28,7 @@ describe("O cadastro de alunos", () => {
   it("cadastra alunos corretamente", () => {
     cadastrarAluno("Mariana","683", "", "");
 
-    expect(cadastro.getAlunos().length).toBe(1);
-    var aluno = cadastro.getAlunos()[0];
+    var aluno = expectSoUmAluno();
     expect(aluno.nome).toBe("Mariana");
     expect(aluno.cpf).toBe("683");
     expect(aluno.email).toBe("");
@@ -34,7 +39,8 @@ describe("O cadastro de alunos", () => {
     cadastrarAluno("Mariana","683", "", "");
     cadastrarAluno("Pedro","683", "", "");
 
-    expect(cadastro.getAlunos().length).toBe(1);
+    var aluno = expectSoUmAluno();
+    expect(aluno.nome).toBe("Mariana");
   })
 
   it("não aceita alunos com login git duplicado", () => {
