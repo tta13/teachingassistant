@@ -28,6 +28,14 @@ export class AlunoService {
               ); 
   }
 
+  deletar(aluno: Aluno): Observable<boolean>{
+    var url: string = this.taURL + "/aluno/" + aluno.cpf;
+    return this.http.delete<any>(url, {headers: this.headers}).pipe(
+      retry(2),
+      map( res => {if (res.success) {return true;} else {return false;}} )
+    );
+  }
+
   getAlunos(): Observable<Aluno[]> {
     return this.http.get<Aluno[]>(this.taURL + "/alunos")
               .pipe(
