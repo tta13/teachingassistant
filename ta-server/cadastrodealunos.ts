@@ -5,7 +5,7 @@ export class CadastroDeAlunos {
 
     cadastrar(aluno: Aluno): Aluno {
      var result = null;
-     if (this.cpfNaoCadastrado(aluno.cpf)) {
+     if (this.alunoNaoCadastrado(aluno.cpf, aluno.gitLogin)) {
        result = new Aluno();
        result.copyFrom(aluno);
        this.alunos.push(result);
@@ -13,8 +13,22 @@ export class CadastroDeAlunos {
      return result;
    }
 
-    cpfNaoCadastrado(cpf: string): boolean {
-      return !this.alunos.find(a => a.cpf == cpf);
+    deletar(cpf: string): boolean{
+      var aluno = this.getAluno(cpf)
+      var index: number = this.alunos.indexOf(aluno, 0);
+      if (index > -1) {
+        this.alunos.splice(index, 1);
+        return true;
+      }
+      return false;
+    }
+
+    getAluno(cpf: string): Aluno{
+      return this.alunos.find(a => a.cpf == cpf);
+    }
+
+    alunoNaoCadastrado(cpf: string, git: string): boolean {
+      return !this.alunos.find(a => a.cpf == cpf || a.gitLogin == git);
    }
 
     atualizar(aluno: Aluno): Aluno {

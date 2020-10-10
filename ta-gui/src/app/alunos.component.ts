@@ -11,7 +11,7 @@ import { AlunoService } from './aluno.service';
 
     aluno: Aluno = new Aluno();
     alunos: Aluno[] = [];
-    cpfduplicado: boolean = false;
+    alunoduplicado: boolean = false;
 
     constructor(private alunoService: AlunoService) {}
 
@@ -23,15 +23,36 @@ import { AlunoService } from './aluno.service';
                     this.alunos.push(ar);
                     this.aluno = new Aluno();
                   } else {
-                    this.cpfduplicado = true;
+                    this.alunoduplicado = true;
                   } 
                 },
                 msg => { alert(msg.message); }
               );
-    } 
+    }
+    
+    deletarAluno(a: Aluno): void{
+      this.alunoService.deletar(a).subscribe(
+        deleted =>{
+          if(deleted){
+            this.removerAlunoDaLista(a);
+            alert("Aluno " + a.nome + " deletado!");
+          }else{
+            alert("Aluno não encontrado")
+          }
+        },
+        msg => { alert(msg.message); }
+      );
+    }
+
+    removerAlunoDaLista(a: Aluno): void{
+      var index: number = this.alunos.indexOf(a, 0);
+      if (index > -1) {
+        this.alunos.splice(index, 1);
+      }
+    }
 
     onMove(): void {
-       this.cpfduplicado = false;
+       this.alunoduplicado = false;
     }
 
      ngOnInit(): void {
