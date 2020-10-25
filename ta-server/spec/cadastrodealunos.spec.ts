@@ -10,7 +10,7 @@ describe("O cadastro de alunos", () => {
     aluno.cpf = cpf;
     aluno.gitLogin = gitLogin;
     aluno.email = mail;
-    cadastro.cadastrar(aluno);
+    return cadastro.cadastrar(aluno);
   }
 
   function expectSoUmAluno() {
