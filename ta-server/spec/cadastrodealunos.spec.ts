@@ -38,4 +38,19 @@ describe("O cadastro de alunos", () => {
     expect(cadastro.getAlunos().length).toBe(1);
   })
 
+  it("não aceita alunos com login git duplicado", () => {var aluno: Aluno = new Aluno();
+    aluno.nome = "Tales";
+    aluno.cpf = "683";
+    aluno.gitLogin = "tta"
+    cadastro.cadastrar(aluno);
+
+    aluno = new Aluno();
+    aluno.nome = "Tomaz";
+    aluno.cpf = "688";
+    aluno.gitLogin = "tta";
+    cadastro.cadastrar(aluno);
+
+    expect(cadastro.getAlunos().length).toBe(1);
+  })
+
 })
