@@ -47,7 +47,27 @@ describe("O cadastro de alunos", () => {
     cadastrarAluno("Tales", "683", "tta", "");
     cadastrarAluno("Tomaz", "688", "tta", "");
 
-    expect(cadastro.getAlunos().length).toBe(1);
+    var aluno = expectSoUmAluno();
+    expect(aluno.nome).toBe("Tales");
+  })
+
+  it("remove aluno corretamente", () => {
+    var aluno1 = cadastrarAluno("Tales", "683", "", "");
+    var aluno2 = cadastrarAluno("Amanda", "709", "", "");
+
+    cadastro.deletar(aluno1.cpf);
+
+    var alunoRestante = expectSoUmAluno();
+    expect(alunoRestante.cpf).toBe(aluno2.cpf);
+  })
+
+  it("não remove nenhum aluno se cpf não estiver registrado", () => {
+    var aluno = cadastrarAluno("Tales", "683", "", "");
+
+    cadastro.deletar("100");
+
+    var alunoRestante = expectSoUmAluno();
+    expect(alunoRestante.cpf).toBe(aluno.cpf);
   })
 
 })
