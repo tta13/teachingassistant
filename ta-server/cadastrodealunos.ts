@@ -28,7 +28,7 @@ export class CadastroDeAlunos {
     }
 
     alunoNaoCadastrado(cpf: string, git: string): boolean {
-      return !this.alunos.find(a => a.cpf == cpf || a.gitLogin == git);
+      return !this.alunos.find(a => a.cpf == cpf || (a.gitLogin == git && git != ""));
    }
 
     atualizar(aluno: Aluno): Aluno {
