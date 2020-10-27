@@ -37,6 +37,10 @@ export class CadastroDeAlunos {
      return result;
    }
 
+    clear(): void{
+      this.alunos.splice(0, this.alunos.length);
+    }
+
     getAlunos(): Aluno[] {
      return this.alunos;
    }

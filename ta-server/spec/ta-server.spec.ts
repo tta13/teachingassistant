@@ -8,6 +8,8 @@ describe("O servidor", () => {
 
   beforeAll(() => {server = require('../ta-server')});
 
+  beforeEach(() => {server.clearServer()});
+
   afterAll(() => {server.closeServer()});
 
   it("inicialmente retorna uma lista de alunos vazia", () => {
@@ -54,5 +56,53 @@ describe("O servidor", () => {
                  expect(err).toEqual(null)
               });
  })
+
+  it("remove alunos corretamente", () => {
+   var aluno1 = {"json":{"nome": "Mari", "cpf" : "965", "email":"", "gitLogin": "mpp"}};
+   var aluno2 = {"json":{"nome": "Pedro", "cpf" : "988", "email":"", "gitLogin": "pgp"}};
+   var resposta1 = '{"nome":"Mari","cpf":"965","email":"","metas":{}}';
+   var resposta2 = '{"nome":"Pedro","cpf":"988","email":"","metas":{}}';
+
+   return request.post(base_url + "aluno", aluno1)
+            .then(body => {
+               expect(body).toEqual({success: "O aluno foi cadastrado com sucesso"});
+               return request.post(base_url + "aluno", aluno2)
+                        .then(body => {
+                           expect(body).toEqual({success: "O aluno foi cadastrado com sucesso"});
+                           return request.delete(base_url + "aluno/" + "965")
+                                    .then(body => {
+                                       expect(body).toEqual('{"success":"Aluno deletado com sucesso"}');
+                                       return request.get(base_url + "alunos")
+                                             .then(body => {
+                                                expect(body).not.toContain(resposta1);
+                                             });
+                                    });
+                        });
+             })
+             .catch(err => {
+                expect(err).toEqual(null)
+             });
+  })
+
+  it("não remove alunos que não existem", () => {
+   var aluno1 = {"json":{"nome": "Mari", "cpf" : "965", "email":""}};
+   var resposta1 = '{"nome":"Mari","cpf":"965","email":"","metas":{}}';
+
+   return request.post(base_url + "aluno", aluno1)
+            .then(body => {
+               expect(body).toEqual({success: "O aluno foi cadastrado com sucesso"});
+               return request.delete(base_url + "aluno/" + "988")
+                        .then(body => {
+                              expect(body).toEqual('{"failure":"O aluno não pode ser deletado"}');
+                              return request.get(base_url + "alunos")
+                                 .then(body => {
+                                    expect(body).toContain(resposta1);
+                                 });
+                        });
+             })
+             .catch(err => {
+                expect(err).toEqual(null)
+             });
+  })
 
 })
